@@ -13,7 +13,7 @@ fn main() {
             "d" => {
                 if args.len() > 2 {
                     match args[2].parse::<i32>() {
-                        Ok(line_num) => match stak::remove_line(line_num){
+                        Ok(line_num) => match stak::remove_line(line_num) {
                             Ok(_) => (),
                             Err(e) => eprintln!("Error: {}", e),
                         },
@@ -27,7 +27,7 @@ fn main() {
                     Ok(_) => println!("Added: {}", data),
                     Err(e) => eprintln!("Error: {}", e),
                 }
-            },
+            }
         }
     }
 }
