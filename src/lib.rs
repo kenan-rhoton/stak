@@ -78,7 +78,7 @@ pub fn remove_line(remove_num: i32) -> std::io::Result<String>{
 
     match read_file_to_vec(data) {
         Ok(mut file) => {
-            if remove_num > file.len() as i32 || remove_num < 0 {
+            if remove_num >= file.len() as i32 || remove_num < 0 {
                 Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, "Line does not exist"))
             } else {
                 let removed = file.remove(remove_num as usize);
