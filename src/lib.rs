@@ -26,10 +26,8 @@ pub fn load_data() -> Vec<String> {
 pub fn append_data(new_line: String) {
     let data = &data_file();
     let mut file = if std::path::Path::new(data).exists() {
-        println!("APPENDING!");
         std::fs::OpenOptions::new().append(true).open(data)
     } else {
-        println!("CREATING!");
         std::fs::File::create(data)
     }.expect("File could not be written to!");
 
