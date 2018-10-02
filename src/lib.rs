@@ -13,24 +13,36 @@ fn data_file() -> String {
     }
 }
 
-pub fn load_data() -> Vec<String> {
+pub fn load_data() -> Option<Vec<String>> {
     let data = &data_file();
-    std::fs::read_to_string(data)
-        .expect(&format!("File could not be read from \"{}\"!", data))
-        .split("\n")
-        .filter(|x| !x.is_empty())
-        .map(|x| x.to_string())
-        .collect()
+
+    match std::fs::read_to_string(data) {
+        Ok(file) => Some(file
+            .split("\n")
+            .filter(|x| !x.is_empty())
+            .map(|x| x.to_string())
+            .collect()),
+        Err(_) => None,
+    }
 }
 
 pub fn append_data(new_line: String) {
     let data = &data_file();
-    let mut file = if std::path::Path::new(data).exists() {
+
+    let file = if std::path::Path::new(data).exists() {
         std::fs::OpenOptions::new().append(true).open(data)
     } else {
         std::fs::File::create(data)
-    }.expect("File could not be written to!");
+    };
 
-    file.write_fmt(format_args!("{}\n", new_line.to_string()))
-        .expect("Something went wrong!");
+    match file {
+        Ok(mut f) => {
+            match f.write_fmt(format_args!("{}\n", new_line)) {
+                Ok(_) => print!("Added: {}", new_line),
+                Err(e) => eprintln!("Error while writing to file: {:?}", e),
+            }
+        },
+        Err(e) => eprintln!("Error while opening the file: {:?}", e),
+    };
+
 }
