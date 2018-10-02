@@ -19,8 +19,9 @@ pub fn load_data() -> Option<Vec<String>> {
     match std::fs::read_to_string(data) {
         Ok(file) => Some(file
             .split("\n")
-            .filter(|x| !x.is_empty())
-            .map(|x| x.to_string())
+            .filter(|line| !line.is_empty())
+            .enumerate()
+            .map(|(i, line)| format!("[{}] {}", i, line).to_string())
             .collect()),
         Err(_) => None,
     }
